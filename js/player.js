@@ -5,10 +5,10 @@
 (function () {
   // ========== 歌单配置 ==========
   const playlist = [
-    { title: '冬の花', artist: '宫本浩次', src: '/assets/audio/dongzhihua.mp3' },
-    { title: '普通Disco', artist: '汪峰', src: '/assets/audio/Disco.mp3' },
-    { title: '天下',   artist: '张杰', src: '/assets/audio/tianxia.mp3' },
-    { title: '童话镇', artist: '陈雪凝', src: '/assets/audio/tonghuazhen.mp3' }
+    { title: '冬の花', artist: '宫本浩次', src: './assets/audio/dongzhihua.mp3' },
+    { title: '普通Disco', artist: '汪峰', src: './assets/audio/Disco.mp3' },
+    { title: '天下',   artist: '张杰', src: './assets/audio/tianxia.mp3' },
+    { title: '童话镇', artist: '陈雪凝', src: './assets/audio/tonghuazhen.mp3' }
   ];
 
   // ========== 格式化时间 (秒 → mm:ss) ==========
