@@ -1,0 +1,10 @@
+.post-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  transition: opacity 0.3s ease;
+}
+.post-content img[data-src] {
+  opacity: 0.6;
+  background: #f0f0f0;
+}
