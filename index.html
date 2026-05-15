@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <!-- Alab -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alab文档库</title>
+  <link rel="icon" href="data:,">
+  <!-- 像素风 -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <!-- CSS -->
+  <link rel="stylesheet" href="./CSS/style.css">
+  <!-- marked.js：Markdown 转 HTML，从 CDN 加载，零安装 -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- highlight.js：代码高亮（可选） -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11/styles/github-dark.min.css">
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
+  <script src="./js/player.js" defer></script>
+  <!--  -->
+  <link rel="stylesheet" href="./CSS/lightbox.css">
+  <script src="./js/lazy-lightbox.js"></script>
+  <script src="./js/Lightbox.js" defer></script>
+</head>
+
+<body>
+
+  <!-- 移动端菜单按钮 -->
+  <button class="menu-toggle" id="menuToggle" aria-label="菜单">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- 左侧边栏 -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="#" class="site-title">📚 Alab文档库</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="切换主题" title="切换明暗主题">
+        <span class="theme-icon">☀️</span>
+      </button>
+    </div>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="搜索文档...">
+      <div class="search-results" id="searchResults"></div>
+    </div>
+    <nav class="sidebar-nav" id="sidebarNav">
+      <!-- JS 动态生成 -->
+    </nav>
+  </aside>
+
+  <!-- 遮罩层（移动端） -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- 右侧内容区 -->
+  <main class="content" id="content">
+    <div class="content-inner">
+      <h1>欢迎 👋</h1>
+      <p>这是你的个人文档库，点击左侧菜单开始浏览。</p>
+      <p>所有内容用 <strong>Markdown</strong> 编写，放在 <code>content/</code> 目录下即可自动生效。</p>
+    </div>
+  </main>
+  <!-- 底部备案区 -->
+  <footer class="site-footer">
+    <p class="footer-text">
+      <span>© 2026 ALab</span>
+      <span class="footer-divider">|</span>
+      <a href="#" class="footer-link">隐私政策</a>
+      <span class="footer-divider">|</span>
+      <span>备案号：京ICP备XXXXXXXX号-1</span>
+    </p>
+    <p class="footer-text footer-note">
+      本站由 <a href="#" class="footer-link">某个技术</a> 驱动，采用 <a href="#" class="footer-link">CC BY-NC-SA 4.0</a> 协议
+    </p>
+  </footer>
+  <!-- ========== 音乐播放器 ========== -->
+  <div class="music-player" id="musicPlayer">
+    <!-- 收起/展开按钮 -->
+    <button class="player-toggle" id="playerToggle" title="展开播放器">🎵</button>
+
+    <!-- 播放器主体 -->
+    <div class="player-body" id="playerBody">
+      <!-- 歌曲信息 -->
+      <div class="player-info">
+        <span class="player-title" id="playerTitle">未在播放</span>
+        <span class="player-artist" id="playerArtist">—</span>
+      </div>
+
+      <!-- 控制按钮组 -->
+      <div class="player-controls">
+        <button class="player-btn" id="prevBtn" title="上一首">⏮</button>
+        <button class="player-btn player-btn-play" id="playBtn" title="播放">▶</button>
+        <button class="player-btn" id="nextBtn" title="下一首">⏭</button>
+      </div>
+
+      <!-- 音量 -->
+      <div class="player-volume">
+        <span class="volume-icon">🔊</span>
+        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70" title="音量">
+      </div>
+      <!-- 放在 playerBody 内部，音量调节之前或之后都行 -->
+      <div class="progress-container">
+        <span class="time-current" id="timeCurrent">00:00</span>
+        <input type="range" class="progress-bar" id="progressBar" min="0" max="100" value="0" step="0.1" />
+        <span class="time-duration" id="timeDuration">00:00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 隐藏的 audio 元素 -->
+  <audio id="audioElement" preload="auto"></audio>
+  <script src="./js/app.js"></script>
+</body>
+<!-- npx serve . -->
+
+</html>
