@@ -1,6 +1,6 @@
 # 图片内放大踩坑点📚
-## 你大D老师还是有说法的，摸了快俩小时，找一个document.body.appendChild(lb)要了老命，这次的v4pro的调用已经很便宜了，还是能解决大部分问题的。
-![Iex](../assets/img/Iex/Iex-1.png)
+## 你D老师还是有说法的，摸了快俩小时，找一个document.body.appendChild(lb)要了老命，这次的v4pro的调用已经很便宜了，还是能解决大部分问题的。
+![Iex](https://pic1.imgdb.cn/item/6a0df40395d4b7068ae88321.png)
 ## 🧠 总结：这次踩坑的全部知识点
 - 1️⃣ 问题表象与根因
 **表象**：点击文章内图片 → 鼠标从“放大镜”变成“抓手”，图片被拖拽，控制台无报错（除了 body 为 null 时崩了）。
