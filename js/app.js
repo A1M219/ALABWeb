@@ -64,7 +64,7 @@ async function init() {
 
   // 配置 marked
   marked.setOptions({
-    highlight: function(code, lang) {
+    highlight: function (code, lang) {
       if (lang && hljs.getLanguage(lang)) {
         return hljs.highlight(code, { language: lang }).value;
       }
@@ -74,7 +74,177 @@ async function init() {
   });
 
   window.addEventListener('hashchange', handleRoute);
+
+  // ===== 初始化阅读进度条 =====
+  const progressBar = document.createElement('div');
+  progressBar.className = 'reading-progress';
+  document.body.prepend(progressBar);
+
+  function updateProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    if (docHeight <= 0) {
+      progressBar.style.width = '0%';
+      return;
+    }
+    const progress = Math.min(scrollTop / docHeight, 1);
+    progressBar.style.width = `${progress * 100}%`;
+  }
+
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('load', updateProgress);
+  updateProgress(); // 初始触发
 }
+
+// ===== 返回顶部按钮 =====
+const backToTopBtn = document.createElement('div');
+backToTopBtn.className = 'back-to-top';
+backToTopBtn.title = '返回顶部';
+document.body.appendChild(backToTopBtn);
+
+function toggleBackToTop() {
+  if (window.scrollY > window.innerHeight) {
+    backToTopBtn.classList.add('visible');
+  } else {
+    backToTopBtn.classList.remove('visible');
+  }
+}
+
+window.addEventListener('scroll', toggleBackToTop, { passive: true });
+window.addEventListener('load', toggleBackToTop);
+toggleBackToTop();
+
+backToTopBtn.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// ===== TOC 二级标题导航 =====
+const tocContainer = document.createElement('div');
+tocContainer.className = 'toc-container';
+tocContainer.innerHTML = '<div class="toc-title">目录</div><ul class="toc-list"></ul>';
+document.body.appendChild(tocContainer);
+
+const tocList = tocContainer.querySelector('.toc-list');
+let tocObserver = null; // IntersectionObserver 实例
+
+function buildTOC() {
+  // 断开旧的 observer
+  if (tocObserver) {
+    tocObserver.disconnect();
+    tocObserver = null;
+  }
+
+  // 查找内容区所有 h2
+  const contentInner = document.querySelector('.content-inner');
+  if (!contentInner) {
+    tocContainer.classList.add('no-headings');
+    return;
+  }
+
+  const headings = contentInner.querySelectorAll('h2');
+  if (headings.length === 0) {
+    tocContainer.classList.add('no-headings');
+    return;
+  }
+
+  tocContainer.classList.remove('no-headings');
+
+  // 为每个 h2 确保有 id（marked.js 通常已生成，此处兜底）
+  const items = [];
+  headings.forEach((h2, i) => {
+    if (!h2.id) {
+      h2.id = 'heading-' + i + '-' + encodeURIComponent(h2.textContent.trim().slice(0, 30));
+    }
+    items.push({ id: h2.id, text: h2.textContent.trim() });
+  });
+
+  // 构建 TOC 列表
+  tocList.innerHTML = items.map(item =>
+    `<li class="toc-item" data-target="${item.id}">${escapeHTML(item.text)}</li>`
+  ).join('');
+
+  // 点击跳转
+  tocList.querySelectorAll('.toc-item').forEach(li => {
+    li.addEventListener('click', () => {
+      const target = document.getElementById(li.dataset.target);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // 手动更新高亮（scrollIntoView 完成后）
+        updateActiveTOCItem();
+      }
+    });
+  });
+
+  // 使用 IntersectionObserver 高亮当前标题
+  tocObserver = new IntersectionObserver((entries) => {
+    // 找出所有当前可见的 heading
+    const visible = entries
+      .filter(e => e.isIntersecting)
+      .map(e => e.target.id);
+
+    if (visible.length > 0) {
+      // 取第一个可见的（即最靠近视口顶部的）
+      setActiveTOCItem(visible[0]);
+    }
+  }, {
+    rootMargin: '-80px 0px -60% 0px',  // 顶部留80px，底部60%不计入
+    threshold: 0
+  });
+
+  headings.forEach(h2 => tocObserver.observe(h2));
+
+  // 初始高亮
+  updateActiveTOCItem();
+}
+
+function setActiveTOCItem(id) {
+  tocList.querySelectorAll('.toc-item').forEach(li => {
+    li.classList.toggle('active', li.dataset.target === id);
+  });
+}
+
+function updateActiveTOCItem() {
+  const headings = document.querySelectorAll('.content-inner h2');
+  if (headings.length === 0) return;
+
+  // 找到第一个在视口顶部上方的 h2（即当前正在阅读的章节）
+  let activeId = headings[0].id;
+  for (const h2 of headings) {
+    if (h2.getBoundingClientRect().top <= 120) {
+      activeId = h2.id;
+    } else {
+      break;
+    }
+  }
+  setActiveTOCItem(activeId);
+}
+
+// 简单的 HTML 转义
+function escapeHTML(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// 使用 MutationObserver 监听内容区变化，自动重建 TOC
+const contentArea = document.querySelector('.content');
+if (contentArea) {
+  const mo = new MutationObserver(() => {
+    // 稍微延迟，等待 DOM 完全渲染
+    clearTimeout(mo._timer);
+    mo._timer = setTimeout(buildTOC, 150);
+  });
+  mo._timer = null;
+  mo.observe(contentArea, { childList: true, subtree: true });
+}
+
+// 首次构建
+setTimeout(buildTOC, 300);
+
+// 监听窗口滚动（作为 IntersectionObserver 的补充，处理边界情况）
+window.addEventListener('scroll', () => {
+  if (!tocObserver) updateActiveTOCItem();
+}, { passive: true });
 
 // ===== 加载导航配置 =====
 async function loadNav() {
@@ -194,7 +364,7 @@ async function setupSearch() {
             if (res.ok) {
               contentCache[item.file] = await res.text();
             }
-          } catch(e) { /* skip */ }
+          } catch (e) { /* skip */ }
         }
       }
     }
