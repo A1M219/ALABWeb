@@ -13,7 +13,16 @@
       "icon": "📝",
       "collapsed": false,
       "items": [
-        { "title": "图片放大问题解决", "file": "I.draggable.md" }
+        { "title": "[开发]二级标题导航（TOC）", "file": "I.TOC.md" },
+        { "title": "[BUG]图片放大问题解决", "file": "I.draggable.md" }
+      ]
+    },
+    {
+      "title": "AI智能",
+      "icon": "🤖",
+      "collapsed": false,
+      "items": [
+        { "title": "OpenClaw对接Blender", "file": "AI.OpenClawBlender.md" }
       ]
     },
     {
@@ -21,8 +30,7 @@
       "icon": "🔬",
       "collapsed": false,
       "items": [
-        { "title": "test", "file": "" },
-        { "title": "test2", "file": "" }
+        { "title": "[维修]GTX260花屏案例", "file": "E.GTX260.md" }
       ]
     },
     {
@@ -30,14 +38,14 @@
       "icon": "🎮",
       "collapsed": false,
       "items": [
-        { "title": "[开服]Unturned简易开服指南", "file": "unturned-server.md" },
-        { "title": "[开服]使用SAKURAFRP网络穿透", "file": "SAKURAFRP.md" },
-        { "title": "[开服]服务器添加mod&创意工坊地图", "file": "Unworkshop.md" },
-        { "title": "[开服]插件安装&权限组", "file": "UCJ.md" },
-        { "title": "[开服]死亡不掉及其他服务器设置", "file": "UCFG.md" },
-        { "title": "[开服]数据库&Uconomy插件", "file": "UUM.md" },
-        { "title": "[模组]制作MOD及配置环境", "file": "U3D.md" },
-        { "title": "[模组]MOD案例一：保险柜", "file": "U3D2.md" }
+        { "title": "[开服]Unturned简易开服指南", "file": "U.unturned-server.md" },
+        { "title": "[开服]使用SAKURAFRP网络穿透", "file": "U.SAKURAFRP.md" },
+        { "title": "[开服]服务器添加mod&创意工坊地图", "file": "U.Unworkshop.md" },
+        { "title": "[开服]插件安装&权限组", "file": "U.UCJ.md" },
+        { "title": "[开服]死亡不掉及其他服务器设置", "file": "U.UCFG.md" },
+        { "title": "[开服]数据库&Uconomy插件", "file": "U.UUM.md" },
+        { "title": "[模组]制作MOD及配置环境", "file": "U.U3D.md" },
+        { "title": "[模组]MOD案例一：保险柜", "file": "U.U3D2.md" }
       ]
     }
   ]
